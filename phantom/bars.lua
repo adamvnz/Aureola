@@ -59,7 +59,7 @@ reflection			- position of reflection, relative to a vertical bar, default="b"
 					  possibles values are : "b","t","l","r" for bottom, top, left, right
 draw_me     - if set to false, text is not drawn (default = true or 1)
               it can be used with a conky string, if the string returns 1, the text is drawn :
-              example : "${if_empty ${wireless_essid wlan0}}${else}1$endif",
+              example : "${if_empty ${wireless_essid wl01}}${else}1$endif",
 
 v1.0 (10 Feb. 2010) original release
 v1.1 (13 Feb. 2010) numeric values can be passed instead conky stats with parameters name="", arg = numeric_value	
@@ -152,7 +152,7 @@ function conky_main_bars()
 			},
 			{
 			name="downspeedf",
-			arg="enp2s0",
+			arg="enp0s25",
 			max=100,
 			angle=360,
 			blocks=18,
@@ -166,7 +166,7 @@ function conky_main_bars()
 			},
 			{
 			name="upspeedf",
-			arg="enp2s0",
+			arg="enp0s25",
 			max=100,
 			angle=360,
 			blocks=18,
