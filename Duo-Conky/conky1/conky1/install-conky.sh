@@ -442,7 +442,7 @@ echo "Starting the conky"
 echo "################################################################"
 
 #starting the conky 
-~/.config/conky/conky-start.sh
+conky -q -c ~/.config/conky/conky.conf
 
 echo "################################################################"
 echo "###################    T H E   E N D      ######################"

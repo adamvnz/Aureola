@@ -1,5 +1,24 @@
 #!/bin/bash
 #
+#                                       
+# MMMMMMMMMMMMMMMMMMMMMMMMMmds+.        
+# MMm----::-://////////////oymNMd+`     
+# MMd      /++                -sNMd:    
+# MMNso/`  dMM    `.::-. .-::.` .hMN:   
+# ddddMMh  dMM   :hNMNMNhNMNMNh: `NMm   
+#     NMm  dMM  .NMN/-+MMM+-/NMN` dMM   
+#     NMm  dMM  -MMm  `MMM   dMM. dMM   
+#     NMm  dMM  -MMm  `MMM   dMM. dMM   
+#     NMm  dMM  .mmd  `mmm   yMM. dMM   
+#     NMm  dMM`  ..`   ...   ydm. dMM   
+#     hMM- +MMd/-------...-:sdds  dMM   
+#     -NMm- :hNMNNNmdddddddddy/`  dMM   
+#      -dMNs-``-::::-------.``    dMM   
+#       `/dMNmy+/:-------------:/yMMM  
+#          ./ydNMMMMMMMMMMMMMMMMMMMMM  
+#             \.MMMMMMMMMMMMMMMMMMM    
+#                                      
+#
 #
 ##################################################################################################################
 #
@@ -12,6 +31,40 @@
 # Author 	: 	Erik Dubois
 # Website 	: 	http://www.erikdubois.be
 ##################################################################################################################
+# 
+# More from Erik Dubois
+#
+# Aurora Conky
+# at http://sourceforge.net/projects/auroraconkytheme/
+# Explanation on the use of this theme can be found at 
+# http://erikdubois.be/category/linux/aurora-conky/
+# 
+# Aureola Conky
+# Collections of nice conky's with lua syntax
+# https://github.com/erikdubois/Aureola
+#
+# Sardi icons
+# Many different styles of icons from colourfull, monochrome, white, circle
+# https://sourceforge.net/projects/sardi/
+#
+# Super Ultra Flat Numix Remix
+# Colourfull and playfull icons
+# https://github.com/erikdubois/Super-Ultra-Flat-Numix-Remix
+#
+# Check out the github - many more scripts for automatic installation of Linux Systems.
+#
+#
+#
+#
+#
+##################################################################################################################
+# If the option -y has been added. It will autoinstall all. Omit if you do not want that.
+##################################################################################################################
+#
+#
+#
+#
+##################################################################################################################
 #
 #   DO NOT JUST RUN THIS. EXAMINE AND JUDGE. AT YOUR OWN RISK.
 #
@@ -22,7 +75,6 @@
 # and copy the configuration file to the standard place
 # where conky looks for a configuration file
 # Lua syntax!!
-
 
 # killing whatever conkies are still working
 echo "################################################################"
@@ -101,12 +153,10 @@ cp start-conky.desktop ~/.config/autostart/start-conky.desktop
 ########################                           F O N T S                            ##########################
 ##################################################################################################################
 
-
-
 echo "################################################################" 
 echo "Installing the fonts if you do not have it yet - with choice"
 
-FONT="SourceSansPro-ExtraLight"
+FONT="Decker"
 
 
 if fc-list | grep -i $FONT >/dev/null ; then
@@ -145,44 +195,66 @@ fi
 
 
 
-##################################################################################################################
-########################                        D I S T R O                             ##########################
-##################################################################################################################
+
+echo "################################################################" 
+echo "Installing the fonts if you do not have it yet - with choice"
+
+FONT="GeosansLight"
 
 
-echo "################################################################"
-echo "Checking presence of lsb-release and install it when missing"
+if fc-list | grep -i $FONT >/dev/null ; then
 
-	if ! location="$(type -p "lsb_release")" || [ -z "lsb_release" ]; then
+	echo "################################################################" 
+    echo "The font is already available. Proceeding ...";
 
-		# check if apt-git is installed
-		if which apt-get > /dev/null; then
+else
+	echo "################################################################" 
+    echo "The font is not currently installed, would you like to install it now? (y/n)";
+    read response
+    if [[ "$response" == [yY] ]]; then
+        echo "Installing the font to the ~/.fonts directory.";
+        cp ~/.config/conky/fonts/* ~/.fonts
+        echo "################################################################" 
+        echo "Building new fonts into the cache files";
+        echo "Depending on the number of fonts, this may take a while..." 
+        fc-cache -fv ~/.fonts
+		echo "################################################################" 
+		echo "Check if the cache build was successful?";    
+        if fc-list | grep -i $FONT >/dev/null; then
+            echo "################################################################" 
+            echo "The font was sucessfully installed!";
+        else
+        	echo "################################################################" 
+            echo "Something went wrong while trying to install the font.";
+        fi
+    else
+    	echo "################################################################" 	
+        echo "Skipping the installation of the font.";
+        echo "Please note that this conky configuration will not work";
+        echo "correctly without the font.";
+    fi
 
-			sudo apt-get install -y lsb-release
-
-		fi
-
-		# check if pacman is installed
-		if which pacman > /dev/null; then
-
-			sudo pacman -S --noconfirm lsb-release
-
-		fi
-
-	fi
+fi
 
 
-DISTRO=$(lsb_release -si)
 
-echo "################################################################"
-echo "You are working on " $DISTRO
-echo "################################################################"
 
 
 ##################################################################################################################
 ########################                    D E P E N D A N C I E S                     ##########################
 ##################################################################################################################
 
+
+
+
+echo "################################################################"
+echo "Checking dependancies"
+
+DISTRO=$(lsb_release -si)
+
+echo "################################################################"
+echo "You are working on " $DISTRO
+echo "################################################################"
 
 
 
@@ -200,232 +272,22 @@ case $DISTRO in
 			echo "installing conky for this script to work"
 			echo "################################################################"
 
-		  	sudo apt-get install -y conky-all
+		  	sudo apt-get install conky-all
 
 		  else
 		  	echo "Conky was installed. Proceeding..."
 		fi
 
-	# D M I D E C O D E
 
-
-		# The conky depends on dmidecode to know the motherboard and manufacturer
-		# check if dmidecode is installed
-
-		if ! location="$(type -p "dmidecode")" || [ -z "dmidecode" ]; then
-
-			echo "################################################################"
-			echo "installing dmidecode for this script to work"
-			echo "#################################################################"
-
-		  	sudo apt-get install -y dmidecode
-
-		  	#without this line dmidecode will not work - it needs sudo
-
-		  	sudo chmod u+s /usr/sbin/dmidecode
-
-		  else
-
-		  	echo "################################################################"
-		  	echo "Dmidecode was installed. Proceeding..."
-			echo "################################################################"
-			echo "Setting the user rights for dmidecode to be able to use it in conky"
-		  	sudo chmod u+s /usr/sbin/dmidecode
-
-		fi
-
-
-	# L M S E N S O R S
-
-
-		# The conky depends on lm-sensors to know the motherboard and manufacturer
-		# check if lm-sensors is installed
-
-		if ! location="$(type -p "sensors")" || [ -z "sensors" ]; then
-
-			echo "################################################################"
-			echo "installing lm-sensors for this script to work"
-			echo "#################################################################"
-
-		  	sudo apt-get install -y lm-sensors
-
-
-
-		  else
-		  	echo "lm-sensors was installed. Proceeding..."
-
-		fi
 		;;
 
 	Arch)
 
-		echo "Installing software for your Arch machine"
-
-	# L M S E N S O R S
-
-
-		# The conky depends on lm-sensors to know the motherboard and manufacturer
-		# check if lm-sensors is installed
-
-		if ! location="$(type -p "sensors")" || [ -z "sensors" ]; then
-
-			echo "################################################################"
-			echo "installing lm-sensors for this script to work"
-			echo "#################################################################"
-
-		  	sudo pacman -S --noconfirm lm_sensors
-
-		  else
-		  	echo "################################################################"
-		  	echo "lm-sensors was installed. Proceeding..."
-
-
-		fi
-
-
-
-	# D M I D E C O D E
-
-
-		# The conky depends on dmidecode to know more info
-
-		if ! location="$(type -p "dmidecode")" || [ -z "dmidecode" ]; then
-
-			echo "################################################################"
-			echo "installing dmidecode for this script to work"
-			echo "#################################################################"
-
-		  	sudo pacman -S --noconfirm dmidecode
-
-		  else
-		  	echo "################################################################"
-		  	echo "dmidecode was installed. Proceeding..."
-
-
-		fi
-
-		echo "Setting the user rights for dmidecode to be able to use it in conky"
-		 sudo chmod u+s /usr/sbin/dmidecode
-
-	# C O N K Y
-
-		# check if conky is installed
-
-		if pacman -Q conky > /dev/null ; then
-
-
-			echo "################################################################"
-			echo "Conky is already installed. Proceeding..."
-
-
-
-		else
-
-			echo "################################################################"
-			echo "installing conky for this script to work"
-			echo "you may need to install conky-lua-nv manually"
-
-
-
-			program="conky"
-
-
-			if which pacaur > /dev/null; then
-
-				echo "Installing with pacaur"
-				pacaur -S --noconfirm --noedit  $program
-
-			elif which packer > /dev/null; then
-
-				echo "Installing with packer"
-				packer -S --noconfirm --noedit  $program 	
-
-			elif which yaourt > /dev/null; then
-
-				echo "Installing with yaourt"
-				yaourt -S --noconfirm --noedit  $program
-				  	
-			fi
-
-		fi
-
+		echo "You are using an arch machine"
+		echo "For this conky to work fully"
+		echo "you need to install the following packages"
+		echo "- conky-lua"
 		;;
-
-	Solus)
-	
-	# C O N K Y
-
-		# check if conky is installed
-		if ! location="$(type -p "conky")" || [ -z "conky" ]; then
-
-			echo "################################################################"
-			echo "installing conky for this script to work"
-			echo "################################################################"
-
-		  	sudo eopkg install -y conky
-
-		  	echo "At this point in time Solus has reverted back to 1.9 version"
-		  	echo "Script to get the latest version is on my github"
-		  	echo "http://github.com/erikdubois"
-		  	echo "Check that you have at least version 1.10"
-		  	conky --version
-		  else
-		  	echo "Conky was installed. Proceeding..."
-		fi
-
-	# D M I D E C O D E
-
-
-		# The conky depends on dmidecode to know the motherboard and manufacturer
-		# check if dmidecode is installed
-
-		if ! location="$(type -p "dmidecode")" || [ -z "dmidecode" ]; then
-
-			echo "################################################################"
-			echo "installing dmidecode for this script to work"
-			echo "#################################################################"
-
-		  	sudo eopkg install -y dmidecode
-
-		  	#without this line dmidecode will not work - it needs sudo
-
-		  	sudo chmod u+s /usr/sbin/dmidecode
-
-		  else
-
-		  	echo "################################################################"
-		  	echo "Dmidecode was installed. Proceeding..."
-			echo "################################################################"
-			echo "Setting the user rights for dmidecode to be able to use it in conky"
-		  	sudo chmod u+s /usr/sbin/dmidecode
-
-		fi
-
-
-	# L M S E N S O R S
-
-
-		# The conky depends on lm-sensors to know the motherboard and manufacturer
-		# check if lm-sensors is installed
-
-		if ! location="$(type -p "sensors")" || [ -z "sensors" ]; then
-
-			echo "################################################################"
-			echo "installing lm-sensors for this script to work"
-			echo "#################################################################"
-
-		  	sudo eopkg install -y lm_sensors
-
-
-
-		  else
-		  	echo "lm-_sensors was installed. Proceeding..."
-
-		fi
-		;;
-
-
-
 
 	*)
 		echo "No dependancies installed."
@@ -442,7 +304,7 @@ echo "Starting the conky"
 echo "################################################################"
 
 #starting the conky 
-~/.config/conky/conky-start.sh
+conky -q -c ~/.config/conky/conky.conf
 
 echo "################################################################"
 echo "###################    T H E   E N D      ######################"
