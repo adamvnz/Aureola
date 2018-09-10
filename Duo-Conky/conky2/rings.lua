@@ -75,8 +75,8 @@ clock_r=125
  
 -- "clock_x" and "clock_y" are the coordinates of the centre of the clock, in pixels, from the top left of the Conky window.
  
-clock_x=175
-clock_y=175
+clock_x=180
+clock_y=180
  
 -- Colour & alpha of the clock hands
  
